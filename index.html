@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <style>
+        /* CSS Styles */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f4f4f4, #d0e6f1); 
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px); 
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fdfdfd;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        li.fade-in {
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeIn 0.3s forwards;
+        }
+
+        li.fade-out {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeOut 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        .delete-btn {
+            background-color: transparent;
+            color: #e74c3c;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task List</h1>
+        <input type="text" id="taskInput" placeholder="Enter a task" />
+        <button id="addTaskButton">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+    <script>
+        // JavaScript Code
+
+        // Adding event listener to the "Add Task" button
+        document.getElementById('addTaskButton').addEventListener('click', addTask);
+
+        // Adding event listener to the input field to allow pressing "Enter" to add a task
+        document.getElementById('taskInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        function addTask() {
+            // Get the value of the task from the input field
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            // If the task is not empty, create a new list item
+            if (taskText !== '') {
+                const taskList = document.getElementById('taskList');
+
+                // Create a new list item
+                const li = document.createElement('li');
+                li.textContent = taskText;
+
+                // Create a delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = '❌'; // Using an emoji for a unique button
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.addEventListener('click', deleteTask);
+
+                // Append the delete button to the list item
+                li.appendChild(deleteBtn);
+
+                // Add an animation class to the list item
+                li.classList.add('fade-in');
+
+                // Append the list item to the task list
+                taskList.appendChild(li);
+
+                // Clear the input field
+                taskInput.value = '';
+
+                // Optional: Focus back to the input field
+                taskInput.focus();
+            }
+        }
+
+        // Function to delete a task with animation
+        function deleteTask(e) {
+            const item = e.target.parentElement;
+
+            // Add an animation class to the item before removing
+            item.classList.add('fade-out');
+
+            // Remove the item after the animation ends
+            item.addEventListener('animationend', () => {
+                item.remove();
+            });
+        }
+    </script>
+</body>
+</html>
